@@ -93,7 +93,7 @@ namespace EventToCommand
             {
                 return new UpdateCommand(() =>
                 {
-                    Trace.WriteLine("ВОТ ТАК ДАВАЙ ЧЁ ЗА КАЛ ВООБЩЕ");
+                    Trace.WriteLine("Тестовая команда");
                 });
             }
         }
