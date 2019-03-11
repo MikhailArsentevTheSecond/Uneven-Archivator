@@ -65,7 +65,9 @@ namespace WindowControl
 
         // Свойство для создания главного окна. Закрытие его приведёт к закрытию всех окон приложения.
         public static readonly DependencyProperty IsForAppCloseProperty =
-            DependencyProperty.Register("IsForAppClose", typeof(bool), typeof(WindowButtons), new PropertyMetadata(false));
+            DependencyProperty.Register("IsForAppClose",
+                typeof(bool), 
+                typeof(WindowButtons), new PropertyMetadata(false));
 
         private void IsForAppCloseChangedProp(DependencyObject o, DependencyPropertyChangedEventArgs e)
         {
@@ -89,7 +91,9 @@ namespace WindowControl
 
         // Цвет заднего фона при наведении мыши на кнопку
         public static readonly DependencyProperty LightUpColorProperty =
-            DependencyProperty.Register("LightUpColor", typeof(Brush), typeof(WindowButtons), new PropertyMetadata(null));
+            DependencyProperty.Register("LightUpColor",
+                typeof(Brush),
+                typeof(WindowButtons));
         #endregion
 
         #region Exit Color | Property
@@ -101,7 +105,9 @@ namespace WindowControl
 
         // Using a DependencyProperty as the backing store for ExitColor.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ExitColorProperty =
-            DependencyProperty.Register("ExitColor", typeof(Brush), typeof(WindowButtons), new PropertyMetadata(null));
+            DependencyProperty.Register("ExitColor",
+                typeof(Brush),
+                typeof(WindowButtons));
 
         #endregion
 
@@ -114,7 +120,9 @@ namespace WindowControl
 
         // Using a DependencyProperty as the backing store for MinStyle.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty MinButtonStyleProperty =
-            DependencyProperty.Register("MinButtonStyle", typeof(Style), typeof(WindowButtons), new PropertyMetadata(null));
+            DependencyProperty.Register("MinButtonStyle",
+                typeof(Style),
+                typeof(WindowButtons));
 
         #endregion
 
@@ -129,7 +137,9 @@ namespace WindowControl
 
         // Using a DependencyProperty as the backing store for MaxButtonStyle.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty MaxButtonStyleProperty =
-            DependencyProperty.Register("MaxButtonStyle", typeof(Style), typeof(WindowButtons), new PropertyMetadata(null));
+            DependencyProperty.Register("MaxButtonStyle", 
+                typeof(Style),
+                typeof(WindowButtons));
 
 
         #endregion
@@ -145,8 +155,9 @@ namespace WindowControl
 
         // Using a DependencyProperty as the backing store for MaxButtonStyle.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ExitButtonStyleProperty =
-            DependencyProperty.Register("ExitButtonStyle", typeof(Style), typeof(WindowButtons), new PropertyMetadata(null));
-
+            DependencyProperty.Register("ExitButtonStyle",
+                typeof(Style),
+                typeof(WindowButtons));
 
         #endregion
 
@@ -172,7 +183,6 @@ namespace WindowControl
         // закрыть окно в котором расположен WindowButtons
         private void ExitButton_Click(object sender, RoutedEventArgs e)
         {
-            Trace.WriteLine("Вызвался етот");
             if (Window.GetWindow(this) != null)
             {
                 Window.GetWindow(this).Close();

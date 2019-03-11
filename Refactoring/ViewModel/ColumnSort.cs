@@ -28,7 +28,9 @@ namespace UnevenArchivatorMVVM.Sorting
 
         // При наличии свойства Sort вызывает SortPropertyChangedCallback, который добавляет обработчик клика по заголовку колонны
         public static readonly DependencyProperty SortProperty =
-            DependencyProperty.RegisterAttached("Sort", typeof(bool), typeof(ListViewSort), new UIPropertyMetadata(false, SortPropertyChangedCallBack));
+            DependencyProperty.RegisterAttached("Sort",
+                typeof(bool),
+                typeof(ListViewSort), new UIPropertyMetadata(false, SortPropertyChangedCallBack));
 
        // Избыточный регион ?
         #region Sort Logic
@@ -112,7 +114,10 @@ namespace UnevenArchivatorMVVM.Sorting
 
         // Using a DependencyProperty as the backing store for MyProperty.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty SortNameProperty =
-            DependencyProperty.RegisterAttached("SortName", typeof(string), typeof(ListViewSort), new PropertyMetadata());
+            DependencyProperty.RegisterAttached("SortName",
+                typeof(string),
+                typeof(ListViewSort));
+
         #endregion
 
     }

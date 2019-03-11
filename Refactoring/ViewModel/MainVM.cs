@@ -9,8 +9,6 @@ using System.Windows.Media;
 
 namespace EventToCommand
 {
-    // это DataContext. Их можно сделать несколько. Вот этот для explorer-а.
-    // А можно ещё и наследованием заняться
     public class MainVM : INotifyPropertyChanged
     {
         #region Notify Property interface
@@ -100,7 +98,7 @@ namespace EventToCommand
         
     }
     
-    // Общая реализация команды, выполняемая по нажатия на кнопку
+    // Общая реализация команды
     class DefaultCommand : ICommand
     {
         // Действие, которое выполнится при вызове функции

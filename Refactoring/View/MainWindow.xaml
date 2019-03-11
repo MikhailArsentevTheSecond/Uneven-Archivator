@@ -38,7 +38,7 @@
         <!--Кнока и TextBox. раньше можно было менять размер TextBox-а но были графические баги -->
         <DockPanel Height="30" DockPanel.Dock="Top" >
             <Button HorizontalAlignment="Left" Width="30" Height="30" Style="{StaticResource DirectoryButton}" Command="{Binding ToRootCommand}"/>
-            <TextBox x:Name="Navigator" FontSize="20" CommandControl:EventCommand.EventNameProperty="KeyUp" CommandControl:EventCommand.CommandProperty="{Binding NavigatorSet}" />
+            <TextBox x:Name="Navigator" FontSize="20" CommandControl:EventCommand.EventName="KeyUp" CommandControl:EventCommand.Command="{Binding NavigatorSet}" />
         </DockPanel>
         <Separator Height="8" DockPanel.Dock="Top" Background="Transparent"></Separator>
         <!--Сам Проводник-->
