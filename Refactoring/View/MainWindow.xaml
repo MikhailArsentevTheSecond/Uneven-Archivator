@@ -1,16 +1,18 @@
-﻿<Window x:Class="Refactoring.MainWindow"
+﻿<Window x:Class="UnevenArchivatorMVVM.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local ="clr-namespace:ViewModelNameSpace"
-        xmlns:Util="clr-namespace:Wpf.Util"
+        xmlns:Control="clr-namespace:WindowControl"
+        xmlns:Sort="clr-namespace:UnevenArchivatorMVVM.Sorting"
+        xmlns:VM="clr-namespace:EventToCommand"
+        xmlns:CommandControl="clr-namespace:EventToCommand"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Window.Style>
         <Style TargetType="{x:Type Window}">
             <Setter Property="WindowStyle" Value="None"/>
-            <!--Здесь я не могу поставить ссылку на ресурсы. что логично. Ресурсы ещё не подключены-->
+            <!--Здесь я не могу поставить ссылку на ресурс цвета. Что логично. Ресурсы ещё не подключены-->
             <Setter Property="Background" Value="#191817"/>
             <Setter Property="WindowChrome.WindowChrome">
                 <Setter.Value>
@@ -23,41 +25,32 @@
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="Dictionary1.xaml"/>
+                <ResourceDictionary Source="MainDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
     <Window.DataContext>
-        <local:MainVM/>
+        <VM:MainVM></VM:MainVM>
     </Window.DataContext>
     <DockPanel Margin="5">
         <!--Стандартные кнопки Полноэкранности, Свёртывания и Закрытия-->
-        <StackPanel WindowChrome.IsHitTestVisibleInChrome="True" DockPanel.Dock="Top" HorizontalAlignment="Right" Orientation="Horizontal" Height="30">
-            <Button x:Name="MinimizeButton" Width="30" Height="30" VerticalAlignment="Top" HorizontalAlignment="Right" Style="{StaticResource MinimizeButton}"/>
-            <Button x:Name="FullSizeButton" Width="30" Height="30" VerticalAlignment="Top" HorizontalAlignment="Right" Style="{StaticResource FullSizeButton}"/>
-            <Button x:Name="ExitButton"     Width="30" Height="30" VerticalAlignment="Top" HorizontalAlignment="Right" Style="{StaticResource ExitButton}"/>
-        </StackPanel>
+        <Control:WindowButtons WindowChrome.IsHitTestVisibleInChrome="True" HorizontalAlignment="Right" DockPanel.Dock="Top"></Control:WindowButtons>
         <!--Кнока и TextBox. раньше можно было менять размер TextBox-а но были графические баги -->
         <DockPanel Height="30" DockPanel.Dock="Top" >
-            <Button HorizontalAlignment="Left" Width="30" Height="30" Style="{StaticResource DirectoryButton}"/>
-            <Separator Width="8" Background="Transparent"/>
-            <TextBox x:Name="Navigator" FontSize="20">
-                <TextBox.InputBindings>
-                    <KeyBinding Key="Return" Command="{Binding UpdateListComm}"/>
-                </TextBox.InputBindings>
-            </TextBox>
+            <Button HorizontalAlignment="Left" Width="30" Height="30" Style="{StaticResource DirectoryButton}" Command="{Binding ToRootCommand}"/>
+            <TextBox x:Name="Navigator" FontSize="20" CommandControl:EventCommand.EventNameProperty="KeyUp" CommandControl:EventCommand.CommandProperty="{Binding NavigatorSet}" />
         </DockPanel>
         <Separator Height="8" DockPanel.Dock="Top" Background="Transparent"></Separator>
         <!--Сам Проводник-->
-        <ListView x:Name="Explorer" AllowDrop="True" FontFamily="Microsoft New Tai Lue"
-                  Util:ListSortRequiem.Sort="True"
+        <ListView x:Name="Explorer" AllowDrop="True"  DataContext="{Binding ListViewData, UpdateSourceTrigger=PropertyChanged}"
+                  FontFamily="Microsoft New Tai Lue"
+                  Sort:ListViewSort.Sort="True"
                   >
             <ListView.Resources>
                 <Style TargetType="ListView">
                     <!--Цвет заднего фона ListView Чуть светлее чем основное окно-->
                     <Setter Property="Background" Value="{StaticResource ListViewBackGround}" />
                 </Style>
-                <!--Стиль для шапки колонны. Тоже прийдётся писать строчек 200 для отмены ивента наведения мыши-->
                 <Style TargetType="GridViewColumnHeader" BasedOn="{StaticResource ColumnHeader}">
                     <Style.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
@@ -82,7 +75,7 @@
                     <!--Реализовать ивент изменения размера для GridViewColumn-->
                     <!--Объявление колонн-->
                     <GridViewColumn Header="Имя" Width="230"
-                                    Util:ListSortRequiem.SortName="Name">
+                                    Sort:ListViewSort.SortName="Name" >
                         <!--Стиль для элемента списка. Теперь в нём есть изображение-->
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
@@ -95,9 +88,9 @@
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
                     <!--Эти простые и описывают сами себя. Дата. Тип. Размер-->
-                    <GridViewColumn DisplayMemberBinding="{Binding ChangeData}" Util:ListSortRequiem.SortName="ChangeData">Дата изменения</GridViewColumn>
-                    <GridViewColumn DisplayMemberBinding="{Binding Type}" Util:ListSortRequiem.SortName="Type" >Тип</GridViewColumn>
-                    <GridViewColumn Header="Размер" Util:ListSortRequiem.SortName="Size">
+                    <GridViewColumn DisplayMemberBinding="{Binding ChangeData}" Sort:ListViewSort.SortName="ChangeData">Дата изменения</GridViewColumn>
+                    <GridViewColumn DisplayMemberBinding="{Binding Type}" Sort:ListViewSort.SortName="Type" >Тип</GridViewColumn>
+                    <GridViewColumn Header="Размер" Sort:ListViewSort.SortName="Size">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <!--Стиль для колонны. Текст привязан к правой стороне-->

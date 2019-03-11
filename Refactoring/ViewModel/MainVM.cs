@@ -7,17 +7,21 @@ using Microsoft.WindowsAPICodePack.Shell;
 using System.Windows.Input;
 using System.Windows.Media;
 
-namespace ViewModelNameSpace
+namespace EventToCommand
 {
     // это DataContext. Их можно сделать несколько. Вот этот для explorer-а.
     // А можно ещё и наследованием заняться
     public class MainVM : INotifyPropertyChanged
     {
+        #region Notify Property interface
+
         public event PropertyChangedEventHandler PropertyChanged;
         private void OnPropertyChanged(string PropertyName)
         {
             PropertyChanged?.Invoke(new object(), new PropertyChangedEventArgs(PropertyName));
         }
+
+        #endregion
 
         public ObservableCollection<ListItem> ListViewData
         { get; set; }
@@ -56,10 +60,6 @@ namespace ViewModelNameSpace
         // конструктор как инициализатор
         public MainVM()
         {
-            Trace.WriteLine("Вызван конструктор");
-            ListViewData = new ObservableCollection<ListItem>();
-            ListViewData.Add(new ListItem("Danya","Debil"));
-            ListViewData.Add(new ListItem("Anub", "Zond"));
         }
 
         // теперь нужна команда которая обновит ListViewData
@@ -93,40 +93,42 @@ namespace ViewModelNameSpace
             {
                 return new UpdateCommand(() =>
                 {
-                    Trace.WriteLine("Команда сработала");
-                    ListViewData.Add(new ListItem("Penis", "Anus"));
+                    Trace.WriteLine("ВОТ ТАК ДАВАЙ ЧЁ ЗА КАЛ ВООБЩЕ");
                 });
             }
         }
-
-        #region Пример НЕ МОЙ
-        private int _number1;
-        public int Number1
-        {
-            get { return _number1; }
-            set
-            {
-                _number1 = value;
-                OnPropertyChanged("Number3"); // уведомление View о том, что изменилась сумма
-            }
-        }
-
-        private int _number2;
-        public int Number2
-        {
-            get { return _number2; }
-            set { _number2 = value; OnPropertyChanged("Number3"); }
-        }
-
-        public int Number3 => Refactoring.Model.MathFuncs.GetSumOf(_number1, _number2);
-
-        #endregion
         
     }
-    /* Data Context может быть только один.
-    public class WindowVM:MainVM
+    
+    // Общая реализация команды, выполняемая по нажатия на кнопку
+    class DefaultCommand : ICommand
     {
+        // Действие, которое выполнится при вызове функции
+        private readonly Action<object> execute;
 
+        // функция проверки возможности вызвать Action.
+        private readonly Func<object, bool> canExecute;
+
+        public event EventHandler CanExecuteChanged
+        {
+            add { CommandManager.RequerySuggested += value; }
+            remove { CommandManager.RequerySuggested -= value; }
+        }
+
+        public DefaultCommand(Action<object> execute, Func<object, bool> canExecute = null)
+        {
+            this.execute = execute;
+            this.canExecute = canExecute;
+        }
+
+        public bool CanExecute(object parameter)
+        {
+            return this.canExecute == null || this.canExecute(parameter);
+        }
+
+        public void Execute(object parameter)
+        {
+            this.execute(parameter);
+        }
     }
-    */
 }

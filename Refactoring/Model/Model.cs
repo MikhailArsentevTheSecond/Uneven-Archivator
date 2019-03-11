@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Refactoring.Model
+namespace UnevenArchivatorMVVM.Model
 {
     #region Прост. пример
     /// <summary>
