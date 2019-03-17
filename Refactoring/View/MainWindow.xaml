@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:Control="clr-namespace:WindowControl"
         xmlns:Sort="clr-namespace:UnevenArchivatorMVVM.Sorting"
-        xmlns:VM="clr-namespace:EventToCommand"
+        xmlns:VM="clr-namespace:MainViewModel"
         xmlns:CommandControl="clr-namespace:EventToCommand"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
@@ -33,18 +33,22 @@
         <VM:MainVM></VM:MainVM>
     </Window.DataContext>
     <DockPanel Margin="5">
-        <!--Стандартные кнопки Полноэкранности, Свёртывания и Закрытия-->
+        <!--Кнопки управления окном (Window Buttons Control Сокращённо W.B.C )-->
         <Control:WindowButtons WindowChrome.IsHitTestVisibleInChrome="True" HorizontalAlignment="Right" DockPanel.Dock="Top"></Control:WindowButtons>
-        <!--Кнока и TextBox. раньше можно было менять размер TextBox-а но были графические баги -->
+
         <DockPanel Height="30" DockPanel.Dock="Top" >
-            <Button HorizontalAlignment="Left" Width="30" Height="30" Style="{StaticResource DirectoryButton}" Command="{Binding ToRootCommand}"/>
-            <TextBox x:Name="Navigator" FontSize="20" CommandControl:EventCommand.EventName="KeyUp" CommandControl:EventCommand.Command="{Binding NavigatorSet}" />
+            <!--Кнопка "To Root"-->
+            <Button HorizontalAlignment="Left" Width="30" Height="30" Style="{StaticResource DirectoryButton}" Command="{Binding ToRoot}"/>
+            <!--TextBox "Navigator"-->
+            <TextBox Text="{Binding NavigatorString}" FontSize="20" CommandControl:EventCommand.EventName="KeyUp" CommandControl:EventCommand.Command="{Binding Navigate}" />
         </DockPanel>
+        
         <Separator Height="8" DockPanel.Dock="Top" Background="Transparent"></Separator>
-        <!--Сам Проводник-->
-        <ListView x:Name="Explorer" AllowDrop="True"  DataContext="{Binding ListViewData, UpdateSourceTrigger=PropertyChanged}"
+        <!--ListView Explorer-->
+        <ListView AllowDrop="True"
                   FontFamily="Microsoft New Tai Lue"
                   Sort:ListViewSort.Sort="True"
+                  ItemsSource="{Binding ListViewData, UpdateSourceTrigger=PropertyChanged}"
                   >
             <ListView.Resources>
                 <Style TargetType="ListView">
@@ -74,13 +78,13 @@
                 <GridView AllowsColumnReorder="False">
                     <!--Реализовать ивент изменения размера для GridViewColumn-->
                     <!--Объявление колонн-->
-                    <GridViewColumn Header="Имя" Width="230"
+                    <GridViewColumn Header="Имя" Width="250"
                                     Sort:ListViewSort.SortName="Name" >
                         <!--Стиль для элемента списка. Теперь в нём есть изображение-->
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
-                                    <Image MaxWidth="18" MaxHeight="18" MinWidth="18" MinHeight="18" Source="{Binding Image}"></Image>
+                                    <Image Width="18" Height="18" Source="{Binding Image}"></Image>
                                     <Separator Width="3" Background="Transparent"></Separator>
                                     <TextBlock Text="{Binding Name}" VerticalAlignment="Bottom" ></TextBlock>
                                 </StackPanel>
@@ -88,8 +92,8 @@
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
                     <!--Эти простые и описывают сами себя. Дата. Тип. Размер-->
-                    <GridViewColumn DisplayMemberBinding="{Binding ChangeData}" Sort:ListViewSort.SortName="ChangeData">Дата изменения</GridViewColumn>
-                    <GridViewColumn DisplayMemberBinding="{Binding Type}" Sort:ListViewSort.SortName="Type" >Тип</GridViewColumn>
+                    <GridViewColumn DisplayMemberBinding="{Binding ChangeData}" Sort:ListViewSort.SortName="ChangeData" Width="140">Дата изменения</GridViewColumn>
+                    <GridViewColumn DisplayMemberBinding="{Binding Type}" Sort:ListViewSort.SortName="Type" Width="140" >Тип</GridViewColumn>
                     <GridViewColumn Header="Размер" Sort:ListViewSort.SortName="Size">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>

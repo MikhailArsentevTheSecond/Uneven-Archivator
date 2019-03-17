@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,18 +19,54 @@ namespace UnevenArchivatorMVVM.Model
     }
     #endregion
 
-    public static class Collection
+    public class Collection
     {
-        public static void UpdateCollection(string Path, out ObservableCollection<ShellObject> Data)
+        // DataContext для ListView
+        // что делать с типом коллекции
+        
+        public static ObservableCollection<MainViewModel.ListItem> UpdateCollection(string Path)
         {
-            Data = new ObservableCollection<ShellObject>();
-            using (var Dir = (ShellFolder)ShellObject.FromParsingName(Path))
+            // Пока чо здесь. Попробовать где-то в другом месте. Если это вообще имеет смысл.
+            ObservableCollection<MainViewModel.ListItem> ListModel = new ObservableCollection<MainViewModel.ListItem>();
+            // Должны быть папки и файлы
+            Trace.WriteLine(Path);
+            using (var Folder =(ShellFolder)ShellFolder.FromParsingName(Path))
             {
-                foreach (var file in Dir)
+                foreach (var item in Folder)
                 {
-                    Data.Add(file);
+                    ListModel.Add(new MainViewModel.ListItem(item));
                 }
             }
+            return ListModel;
+        }
+
+        public static ObservableCollection<MainViewModel.ListItem> UpdateCollection(ShellFolder Folder)
+        {
+            // Пока чо здесь. Попробовать где-то в другом месте. Если это вообще имеет смысл.
+            ObservableCollection<MainViewModel.ListItem> ListModel = new ObservableCollection<MainViewModel.ListItem>();
+            // Должны быть папки и файлы
+            using (Folder)
+            {
+                foreach (var item in Folder)
+                {
+                    ListModel.Add(new MainViewModel.ListItem(item));
+                }
+            }
+
+            return ListModel;
+        }
+
+        /// <summary>
+        /// Обновление списка для тестов
+        /// </summary>
+        /// <returns></returns>
+        public static ObservableCollection<MainViewModel.ListItem> UpdateCollection()
+        {
+            return new ObservableCollection<MainViewModel.ListItem>()
+            {
+            new MainViewModel.ListItem("РАБОТАЕТ НАКОНЕЦ-ТО"),
+            new MainViewModel.ListItem("РАБОТАЕТ НАКОНЕЦ-ТО X 2")
+            };
         }
     }
 
